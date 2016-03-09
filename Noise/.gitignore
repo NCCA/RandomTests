@@ -47,6 +47,7 @@ Makefile
 #Cmake
 *.tiff
 *.png
+Noise
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
