@@ -81,7 +81,7 @@ private :
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief index into the noise table
   //----------------------------------------------------------------------------------------------------------------------
-  std::vector<Type>  m_index;
+  std::vector<Type>  m_indexTable;
   // the size of the unit is 4294967296 the largest we can hold!
   unsigned long long m_size;
 
@@ -109,9 +109,9 @@ Noise<Type>::Noise()
   m_size=static_cast<unsigned  long long>(std::numeric_limits<Type>::max());
   // allocate memory
   m_noiseTable.resize(m_size);
-  m_index.resize(m_size);
+  m_indexTable.resize(m_size);
   unsigned long long  i=0;
-  std::generate(std::begin(m_index), std::end(m_index), [&i]{ return i++; });
+  std::generate(std::begin(m_indexTable), std::end(m_indexTable), [&i]{ return i++; });
   resetTables();
 }
 
@@ -120,16 +120,14 @@ Noise<Type>::Noise()
 template <typename Type>
 void Noise<Type>::resetTables()
 {
-
-
   srand(m_seed);
   // random functions  may as well use a lambda note using bad rand() % for the
   // initial experiments so we can compare to new random functions
   auto randomPositiveNumber = []( unsigned long long _s ){return int(rand() % _s); };
   auto randPosFloat = [](){return ((1.0f)*((float)rand()/RAND_MAX)); };
   // shuffle the index table randomly (have to use deprecated random_shuffle
-  // due to using old rand functions
-  random_shuffle(std::begin(m_index), std::end(m_index), randomPositiveNumber);
+  // due to using old rand function
+  random_shuffle(std::begin(m_indexTable), std::end(m_indexTable), randomPositiveNumber);
   // fill  noise table
   for(auto &t : m_noiseTable)
   {
@@ -151,7 +149,7 @@ template <typename Type>
 float Noise<Type>::latticeNoise(int _i, int _j, int _k)
 {
 
-#define PERM(x) m_index[(x)&m_size]
+#define PERM(x) m_indexTable[(x)&m_size]
 #define INDEX(ix,iy,iz) PERM( (ix) + PERM((iy)+PERM(iz)))
 // m_noiseTable[m_index[((_i) + m_index[((_j)+m_index[(_k)&255])&255])&255]];
 return m_noiseTable[INDEX(_i,_j,_k)];

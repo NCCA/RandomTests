@@ -14,7 +14,7 @@ void Noise :: resetTables()
   // and create a RandFloat function
   std::uniform_real_distribution<float> randPosFloat(0.0f, 1.0f);
   // shuffle the index table randomly
-  std::shuffle(std::begin(m_index), std::end(m_index), gen);
+  std::shuffle(std::begin(m_indexTable), std::end(m_indexTable), gen);
 
   for(auto &t : m_noiseTable)
   {
@@ -25,7 +25,7 @@ void Noise :: resetTables()
 Noise :: Noise()
 {
   int i=0;
-  std::generate(std::begin(m_index), std::end(m_index), [&i]{ return i++; });
+  std::generate(std::begin(m_indexTable), std::end(m_indexTable), [&i]{ return i++; });
   resetTables();
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ Noise::~Noise()
 float Noise::latticeNoise(int _i, int _j, int _k)
 {
 
-#define PERM(x) m_index[(x)&255]
+#define PERM(x) m_indexTable[(x)&255]
 #define INDEX(ix,iy,iz) PERM( (ix) + PERM((iy)+PERM(iz)))
 // m_noiseTable[m_index[((_i) + m_index[((_j)+m_index[(_k)&255])&255])&255]];
 return m_noiseTable[INDEX(_i,_j,_k)];

@@ -84,7 +84,7 @@ private :
   //----------------------------------------------------------------------------------------------------------------------
   /// @brief index into the noise table
   //----------------------------------------------------------------------------------------------------------------------
-  std::vector<Type>  m_index;
+  std::vector<Type>  m_indexTable;
   // the size of the unit is 4294967296 the largest we can hold!
   unsigned long long m_size;
 
@@ -112,9 +112,9 @@ Noise<Type>::Noise()
   m_size=static_cast<unsigned  long long>(std::numeric_limits<Type>::max());
   // allocate memory
   m_noiseTable.resize(m_size);
-  m_index.resize(m_size);
+  m_indexTable.resize(m_size);
   unsigned long long  i=0;
-  std::generate(std::begin(m_index), std::end(m_index), [&i]{ return i++; });
+  std::generate(std::begin(m_indexTable), std::end(m_indexTable), [&i]{ return i++; });
   resetTables();
 }
 
@@ -128,7 +128,7 @@ void Noise<Type>::resetTables()
   // and create a RandFloat function
   std::uniform_real_distribution<float> randPosFloat(0.0f, 1.0f);
   // shuffle the index table randomly
-  std::shuffle(std::begin(m_index), std::end(m_index), gen);
+  std::shuffle(std::begin(m_indexTable), std::end(m_indexTable), gen);
 
   for(auto &t : m_noiseTable)
   {
@@ -149,7 +149,7 @@ template <typename Type>
 float Noise<Type>::latticeNoise(int _i, int _j, int _k)
 {
 
-#define PERM(x) m_index[(x)&m_size]
+#define PERM(x) m_indexTable[(x)&m_size]
 #define INDEX(ix,iy,iz) PERM( (ix) + PERM((iy)+PERM(iz)))
 // m_noiseTable[m_index[((_i) + m_index[((_j)+m_index[(_k)&255])&255])&255]];
 return m_noiseTable[INDEX(_i,_j,_k)];
