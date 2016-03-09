@@ -6,7 +6,11 @@ The aim of these tests is to explore the different number generators and distrib
 
 The plan is to use the original rand() functions as a basis then use different tests using [perlin noise](https://en.wikipedia.org/wiki/Perlin_noise) as well as other visually interesting subjects (flocking for example) to see how the different functions can be used to get different effects.
 
-As I said this is work in progress so the code is at best a mess and usually much wores.
+As I said this is work in progress so the code is at best a mess and usually much worse.
+
+To run these demos you will need to install [OpenImageIO](https://github.com/OpenImageIO/oiio) as this is used to save images. A C++ 11 compiler is also needed.
+
+Later demos will most likely need to have OpenGL / SDL to work as well and perhaps my NGL library.
 
 ##[Noise](https://github.com/NCCA/RandomTests/tree/master/Noise)
 This demo is the basic noise class using C++ 11 to generate a classic perlin noise table (using a lookup size of 256 / unsigned char). This is based on the implementation in the book [Texturing and Modelling a Procedural approach](http://www.csee.umbc.edu/~ebert/book2e.html) but updated for C++ 11
